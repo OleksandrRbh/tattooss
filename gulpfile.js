@@ -1,7 +1,7 @@
 const { src, dest, parallel, watch, series } = require('gulp');
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync').create();
-
+const ghPages = require('gulp-gh-pages');
 
 function browser() {
     browserSync.init({
@@ -25,8 +25,14 @@ function css() {
         .pipe(browserSync.stream());
 }
 
+function deploy() {
+	return src("./src/**/*")
+			.pipe(ghPages());			
+}
+
 exports.css = css;
 exports.default = series(
     series(css),
     parallel(browser, watchFiles)
 );
+exports.deploy = deploy;
